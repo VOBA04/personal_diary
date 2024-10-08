@@ -7,16 +7,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffa000"
-    tools:context=".MainActivity"
+    tools:context=".AuthActivity"
     >
 
     <TextView
-        android:id="@+id/textView_reg"
+        android:id="@+id/textView_auth"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="Зарегистрироваться"
+        android:text="Авторизация"
         android:textColor="#f5f5f5"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -24,7 +24,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editText_login"
+        android:id="@+id/editText_login_auth"
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:ems="10"
@@ -36,7 +36,7 @@
         android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/editText_pass"
+        android:id="@+id/editText_pass_auth"
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -48,23 +48,21 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/button_reg"
+        android:id="@+id/button_auth"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="50dp"
-        android:text="Зарегистрироваться"
-        android:textAlignment="center"
-        android:textAllCaps="false"
+        android:layout_marginTop="20dp"
+        android:text="Войти в аккаунт"
         android:textSize="24sp" />
 
     <Button
-        android:id="@+id/button_to_sign_in"
+        android:id="@+id/button_to_reg"
         android:layout_width="250dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:text="Войти в аккаунт"
+        android:text="Зарегистрироваться"
         android:textSize="18sp" />
 </LinearLayout>
