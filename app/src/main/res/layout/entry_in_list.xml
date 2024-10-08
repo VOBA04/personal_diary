@@ -1,69 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="#ffa000"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button_back"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:text="Назад" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/button_delete"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="5dp"
-            android:text="Удалить" />
-    </LinearLayout>
+    android:orientation="horizontal"
+    android:layout_height="50dp">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
-        android:text=""
-        android:textSize="34sp"
+        android:id="@+id/title_in_list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:text="Title"
+        android:gravity="center_vertical"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="350dp"
-        android:background="null"
-        android:ems="10"
-        android:inputType="text"
-        android:textAlignment="viewStart" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/images_list"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="150dp" />
-
-    <Button
-        android:id="@+id/button_add_image"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginVertical="10dp"
-        android:text="Добавить картинку" />
+    <TextView
+        android:id="@+id/date_in_list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:text="Date"
+        android:gravity="center_vertical|end"
+        android:textSize="20sp" />
 </LinearLayout>

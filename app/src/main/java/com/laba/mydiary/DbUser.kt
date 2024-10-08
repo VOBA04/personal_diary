@@ -1,5 +1,6 @@
 package com.laba.mydiary
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -26,10 +27,10 @@ class DbUser(val context: Context, factory: SQLiteDatabase.CursorFactory?) : SQL
         return result
     }
 
+    @SuppressLint("Recycle")
     fun getUser(login: String, password: String) : Boolean {
         val db = this.readableDatabase
-        val result = db.rawQuery("SELECT * FROM Users WHETE login = '$login' AND pass = '$password'", null)
-        db.close()
+        val result = db.rawQuery("SELECT * FROM Users WHERE login = '$login' AND pass = '$password'", null)
         return result.moveToFirst()
     }
 }
