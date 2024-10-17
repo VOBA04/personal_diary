@@ -6,31 +6,24 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DbUser(val context: Context, factory: SQLiteDatabase.CursorFactory?) : SQLiteOpenHelper(context, "app", factory, 1) {
-    override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login TEXT UNIQUE, pass TEXT)"
-        db!!.execSQL(query)
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS Users")
-        onCreate(db)
-    }
-
+class DbUser(val db: DBHelper) {
     fun addUser(user: User) : Long{
         val values = ContentValues()
         values.put("login", user.login)
         values.put("pass", user.password)
-        val db = this.writableDatabase
-        val result = db.insert("Users", null, values)
+        val result = db.writableDatabase.insert("Users", null, values)
         db.close()
         return result
     }
 
-    @SuppressLint("Recycle")
-    fun getUser(login: String, password: String) : Boolean {
-        val db = this.readableDatabase
-        val result = db.rawQuery("SELECT * FROM Users WHERE login = '$login' AND pass = '$password'", null)
-        return result.moveToFirst()
+    fun getUser(login: String, password: String) : Long {
+        val result = db.readableDatabase.rawQuery("SELECT * FROM Users WHERE login = '$login' AND pass = '$password'", null)
+        if (!result.moveToFirst()) {
+            result.close()
+            return -1L
+        }
+        val userId = result.getLong(0)
+        result.close()
+        return userId
     }
 }

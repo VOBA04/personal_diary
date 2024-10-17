@@ -1,6 +1,7 @@
 package com.laba.mydiary
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,20 +25,44 @@ class EntriesActivity : AppCompatActivity() {
             insets
         }
 
-        val entriesList = findViewById<RecyclerView>(R.id.entries_list)
-        val entries = arrayListOf<Entry>()
-        val addButton = findViewById<FloatingActionButton>(R.id.button_add_entry)
 
-        val time = Calendar.getInstance().time
-        val formatter = SimpleDateFormat("dd.mm.yyyy")
-        entries.add(Entry("Test1", formatter.format(time), "", arrayListOf()))
+        val entriesList = findViewById<RecyclerView>(R.id.entries_list)
+        val addButton = findViewById<FloatingActionButton>(R.id.button_add_entry)
+        val userId = intent.getLongExtra("userId", -1L)
+
+        val db = DbEntry(DBHelper(this, null))
+        val entries = db.getEntries(userId)
 
         addButton.setOnClickListener {
-            entries.add(Entry("Test entry", formatter.format(time), "", arrayListOf()))
+            val time = Calendar.getInstance().time
+            val formatter = SimpleDateFormat("dd.MM.yyyy")
+            val id = db.addEntry(Entry(0,"Новая заметка", formatter.format(time), "", arrayListOf()), userId)
+            entries.add(Entry(id,"Новая заметка", formatter.format(time), "", arrayListOf()))
             entriesList.adapter = EntriesAdapter(entries, this)
+
+            val intent = Intent(this, EntryActivity::class.java)
+            intent.putExtra("entryId", id)
+            intent.putExtra("entryTitle", entries.last().title)
+            intent.putExtra("entryText", entries.last().text)
+            intent.putStringArrayListExtra("entryImages", entries.last().images)
+            startActivityForResult(intent, 1)
         }
 
         entriesList.layoutManager = LinearLayoutManager(this)
+        entriesList.adapter = EntriesAdapter(entries, this)
+    }
+
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "super.onActivityResult(requestCode, resultCode, data)",
+        "androidx.appcompat.app.AppCompatActivity"
+    )
+    )
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val entriesList = findViewById<RecyclerView>(R.id.entries_list)
+        val db = DbEntry(DBHelper(this, null))
+        val userId = intent.getLongExtra("userId", -1L)
+        val entries = db.getEntries(userId)
         entriesList.adapter = EntriesAdapter(entries, this)
     }
 }

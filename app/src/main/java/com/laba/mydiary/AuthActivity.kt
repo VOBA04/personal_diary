@@ -33,15 +33,16 @@ class AuthActivity : AppCompatActivity() {
             if(login == "" || password == "")
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_LONG).show()
             else{
-                val db = DbUser(this, null)
-                val isAuth = db.getUser(login, password)
-                if (isAuth){
+                val db = DbUser(DBHelper(this, null))
+                val userId = db.getUser(login, password)
+                if (userId != -1L){
                     userLogin.text.clear()
                     val intent = Intent(this, EntriesActivity::class.java)
+                    intent.putExtra("userId", userId)
                     startActivity(intent)
                 }
                 else
-                    Toast.makeText(this, "Такого пользователя нет", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_LONG).show()
                 userPass.text.clear()
             }
         }

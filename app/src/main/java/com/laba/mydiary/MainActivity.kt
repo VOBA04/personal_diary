@@ -34,9 +34,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_LONG).show()
             else {
                 val user = User(login, password)
-                val db = DbUser(this, null)
+                val db = DbUser(DBHelper(this, null))
                 if(db.addUser(user) == -1L)
                     Toast.makeText(this, "Такой пользователь уже существует", Toast.LENGTH_LONG).show()
+                else
+                    Toast.makeText(this, "Вы успешно зарегистрированы!", Toast.LENGTH_LONG).show()
                 userPass.text.clear()
                 userLogin.text.clear()
             }
