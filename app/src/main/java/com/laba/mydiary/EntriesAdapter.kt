@@ -9,7 +9,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class EntriesAdapter(private var entries: List<Entry>, private var context: Context) : RecyclerView.Adapter<EntriesAdapter.MyViewHolder>() {
+class EntriesAdapter(
+    private var entries: List<Entry>,
+    private val userId: Long,
+    private var context: Context
+) :
+    RecyclerView.Adapter<EntriesAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title = view.findViewById<TextView>(R.id.title_in_list)
@@ -18,7 +23,8 @@ class EntriesAdapter(private var entries: List<Entry>, private var context: Cont
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.entry_in_list, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.entry_in_list, parent, false)
         return MyViewHolder(view)
     }
 
@@ -31,6 +37,7 @@ class EntriesAdapter(private var entries: List<Entry>, private var context: Cont
         holder.date.text = entries[position].date
         holder.btn.setOnClickListener {
             val intent = Intent(context, EntryActivity::class.java)
+            intent.putExtra("userId", userId)
             intent.putExtra("entryId", entries[position].id)
             intent.putExtra("entryTitle", entries[position].title)
             intent.putExtra("entryText", entries[position].text)

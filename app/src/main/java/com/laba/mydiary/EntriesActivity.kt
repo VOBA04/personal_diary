@@ -3,6 +3,8 @@ package com.laba.mydiary
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.animation.AnimationUtils
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,7 +16,10 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class EntriesActivity : AppCompatActivity() {
-    @SuppressLint("SimpleDateFormat")
+    private var startX: Float = 0f
+    private var endX: Float = 0f
+
+    @SuppressLint("SimpleDateFormat", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -36,33 +41,52 @@ class EntriesActivity : AppCompatActivity() {
         addButton.setOnClickListener {
             val time = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd.MM.yyyy")
-            val id = db.addEntry(Entry(0,"Новая заметка", formatter.format(time), "", arrayListOf()), userId)
-            entries.add(Entry(id,"Новая заметка", formatter.format(time), "", arrayListOf()))
-            entriesList.adapter = EntriesAdapter(entries, this)
+            val id = db.addEntry(
+                Entry(0, "Новая заметка", formatter.format(time), "", arrayListOf()),
+                userId
+            )
+            entries.add(Entry(id, "Новая заметка", formatter.format(time), "", arrayListOf()))
+            entriesList.adapter = EntriesAdapter(entries, userId, this)
 
             val intent = Intent(this, EntryActivity::class.java)
+            intent.putExtra("userId", userId)
             intent.putExtra("entryId", id)
             intent.putExtra("entryTitle", entries.last().title)
             intent.putExtra("entryText", entries.last().text)
             intent.putStringArrayListExtra("entryImages", entries.last().images)
-            startActivityForResult(intent, 1)
+            startActivity(intent)
+            finish()
         }
 
         entriesList.layoutManager = LinearLayoutManager(this)
-        entriesList.adapter = EntriesAdapter(entries, this)
+        entriesList.adapter = EntriesAdapter(entries, userId, this)
+
+        window.decorView.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    startX = event.x
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    endX = event.x
+                    when {
+                        endX > startX -> swipeRight()
+                    }
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith(
-        "super.onActivityResult(requestCode, resultCode, data)",
-        "androidx.appcompat.app.AppCompatActivity"
-    )
-    )
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val entriesList = findViewById<RecyclerView>(R.id.entries_list)
-        val db = DbEntry(DBHelper(this, null))
-        val userId = intent.getLongExtra("userId", -1L)
-        val entries = db.getEntries(userId)
-        entriesList.adapter = EntriesAdapter(entries, this)
+    private fun swipeRight() {
+        val animation = AnimationUtils.loadAnimation(this, R.anim.swipe_right)
+        window.decorView.startAnimation(animation)
+
+        intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

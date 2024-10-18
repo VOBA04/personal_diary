@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
+    android:layout_height="50dp"
     android:background="#c0c0c0"
-    android:layout_height="50dp">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffa000"
         android:layout_marginVertical="2dp"
+        android:background="#ffa000"
         android:orientation="horizontal">
 
         <TextView
@@ -19,27 +19,27 @@
             android:layout_weight="0.5"
             android:gravity="center_vertical"
             android:text="Title"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/date_in_list"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
             android:layout_weight="0.3"
             android:gravity="center_vertical|end"
             android:text="Date"
-            android:layout_marginEnd="8dp"
-            android:textSize="20sp" />
+            android:textSize="15dp" />
 
         <Button
             android:id="@+id/button_in_entry"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0.2"
-            android:textSize="15dp"
-            android:text="Открыть" />
+            android:text="Открыть"
+            android:textSize="15dp" />
 
     </LinearLayout>
 

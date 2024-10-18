@@ -2,15 +2,16 @@ package com.laba.mydiary
 
 import android.content.ContentValues
 
-class DbEntry(val db: DBHelper) {
-    fun addEntry(entry: Entry, userId: Long) : Long{
+class DbEntry(private val db: DBHelper) {
+    fun addEntry(entry: Entry, userId: Long): Long {
         val values = ContentValues()
         values.put("user_id", userId)
         values.put("title", entry.title)
         values.put("text", entry.text)
-        var images =""
+        values.put("date", entry.date)
+        var images = ""
         for (i in 0..<(entry.images?.size ?: 0))
-            images=images+ entry.images!![i] +" "
+            images = images + entry.images!![i] + " "
         images.trim()
         values.put("images", images)
         val result = db.writableDatabase.insert("Entries", null, values)
@@ -18,20 +19,20 @@ class DbEntry(val db: DBHelper) {
         return result
     }
 
-    fun deleteEntry(id: Long) : Int{
+    fun deleteEntry(id: Long): Int {
         val result = db.writableDatabase.delete("Entries", "id = $id", null)
         db.close()
         return result
     }
 
-    fun updateEntry(id: Long, entry: Entry) : Int{
+    fun updateEntry(id: Long, entry: Entry): Int {
         val values = ContentValues()
         values.put("title", entry.title)
         values.put("text", entry.text)
         values.put("date", entry.date)
-        var images =""
+        var images = ""
         for (i in 0..<(entry.images?.size ?: 0))
-            images=images+ entry.images!![i] +" "
+            images = images + entry.images!![i] + " "
         images.trim()
         values.put("images", images)
         val result = db.writableDatabase.update("Entries", values, "id = $id", null)
@@ -39,11 +40,12 @@ class DbEntry(val db: DBHelper) {
         return result
     }
 
-    fun getEntries(userId: Long) : ArrayList<Entry>{
+    fun getEntries(userId: Long): ArrayList<Entry> {
         val entries = ArrayList<Entry>()
-        val cursor = db.readableDatabase.rawQuery("SELECT * FROM Entries WHERE user_id = '$userId'", null)
-        if (cursor.moveToFirst()){
-            for (i in 1..cursor.count){
+        val cursor =
+            db.readableDatabase.rawQuery("SELECT * FROM Entries WHERE user_id = '$userId'", null)
+        if (cursor.moveToFirst()) {
+            for (i in 1..cursor.count) {
                 val id = cursor.getLong(0)
                 val title = cursor.getString(2)
                 val date = cursor.getString(3)

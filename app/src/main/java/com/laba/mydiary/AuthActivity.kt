@@ -30,18 +30,18 @@ class AuthActivity : AppCompatActivity() {
             val login = userLogin.text.toString().trim()
             val password = userPass.text.toString().trim()
 
-            if(login == "" || password == "")
+            if (login == "" || password == "")
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_LONG).show()
-            else{
+            else {
                 val db = DbUser(DBHelper(this, null))
                 val userId = db.getUser(login, password)
-                if (userId != -1L){
+                if (userId != -1L) {
                     userLogin.text.clear()
                     val intent = Intent(this, EntriesActivity::class.java)
                     intent.putExtra("userId", userId)
                     startActivity(intent)
-                }
-                else
+                    finish()
+                } else
                     Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_LONG).show()
                 userPass.text.clear()
             }
@@ -50,6 +50,7 @@ class AuthActivity : AppCompatActivity() {
         toRegButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

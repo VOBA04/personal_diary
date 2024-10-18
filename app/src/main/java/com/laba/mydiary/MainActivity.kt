@@ -23,20 +23,21 @@ class MainActivity : AppCompatActivity() {
 
         val userLogin = findViewById<EditText>(R.id.editText_login)
         val userPass = findViewById<EditText>(R.id.editText_pass)
-        val regButton =  findViewById<Button>(R.id.button_reg)
+        val regButton = findViewById<Button>(R.id.button_reg)
         val signInButton = findViewById<Button>(R.id.button_to_sign_in)
 
         regButton.setOnClickListener {
             val login = userLogin.text.toString().trim()
             val password = userPass.text.toString().trim()
 
-            if(login == "" || password == "")
+            if (login == "" || password == "")
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_LONG).show()
             else {
                 val user = User(login, password)
                 val db = DbUser(DBHelper(this, null))
-                if(db.addUser(user) == -1L)
-                    Toast.makeText(this, "Такой пользователь уже существует", Toast.LENGTH_LONG).show()
+                if (db.addUser(user) == -1L)
+                    Toast.makeText(this, "Такой пользователь уже существует", Toast.LENGTH_LONG)
+                        .show()
                 else
                     Toast.makeText(this, "Вы успешно зарегистрированы!", Toast.LENGTH_LONG).show()
                 userPass.text.clear()
@@ -46,7 +47,8 @@ class MainActivity : AppCompatActivity() {
 
         signInButton.setOnClickListener {
             val intent = Intent(this, AuthActivity::class.java)
-            startActivity((intent))
+            startActivity(intent)
+            finish()
         }
     }
 }
