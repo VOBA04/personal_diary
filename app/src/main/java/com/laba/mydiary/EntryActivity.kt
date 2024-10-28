@@ -1,17 +1,20 @@
 package com.laba.mydiary
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -19,6 +22,7 @@ import java.util.Calendar
 class EntryActivity : AppCompatActivity() {
     private var startX: Float = 0f
     private var endX: Float = 0f
+    private lateinit var imagesAdapter: ImagesAdapter
 
     @SuppressLint("ClickableViewAccessibility", "SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,22 +35,44 @@ class EntryActivity : AppCompatActivity() {
             insets
         }
 
-        val title = findViewById<TextView>(R.id.title)
-        val btn_back = findViewById<Button>(R.id.button_back)
-        val btn_delete = findViewById<Button>(R.id.button_delete)
+        val title = findViewById<EditText>(R.id.title)
+        val btnBack = findViewById<Button>(R.id.button_back)
+        val btnDelete = findViewById<Button>(R.id.button_delete)
         val mainText = findViewById<EditText>(R.id.editText_text)
-        val btn_add_im = findViewById<Button>(R.id.button_add_image)
+        val btnAddIm = findViewById<Button>(R.id.button_add_image)
         val imagesView = findViewById<RecyclerView>(R.id.images_list)
-        val images = intent.getStringArrayListExtra("entryImages")
+        var images = intent.getStringArrayListExtra("entryImages")
+        if (images == null)
+            images = arrayListOf()
         val id = intent.getLongExtra("entryId", 0)
         val userId = intent.getLongExtra("userId", 0)
 
-        title.text = intent.getStringExtra("entryTitle")
+        val db = DbEntry(DBHelper(this, null))
+        title.setText(intent.getStringExtra("entryTitle"))
         mainText.setText(intent.getStringExtra("entryText"))
-        //images
+        imagesView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        imagesAdapter = ImagesAdapter(images, this)
+        imagesAdapter.onClickListener(object : ImagesAdapter.OnItemClickListener {
+            override fun onLongItemClick(position: Int, view: View) {
+                val time = Calendar.getInstance().time
+                val formatter = SimpleDateFormat("dd.MM.yyyy")
+                images.removeAt(position)
+                imagesView.adapter = imagesAdapter
+                db.updateEntry(
+                    id,
+                    Entry(
+                        id,
+                        title.text.toString(),
+                        formatter.format(time),
+                        mainText.text.toString(),
+                        images
+                    )
+                )
+            }
+        })
+        imagesView.adapter = imagesAdapter
 
-        btn_back.setOnClickListener {
-            val db = DbEntry(DBHelper(this, null))
+        btnBack.setOnClickListener {
             val time = Calendar.getInstance().time
             val formatter = SimpleDateFormat("dd.MM.yyyy")
             db.updateEntry(
@@ -65,13 +91,19 @@ class EntryActivity : AppCompatActivity() {
             finish()
         }
 
-        btn_delete.setOnClickListener {
-            val db = DbEntry(DBHelper(this, null))
+        btnDelete.setOnClickListener {
             db.deleteEntry(id)
             val intent = Intent(this, EntriesActivity::class.java)
             intent.putExtra("userId", userId)
             startActivity(intent)
             finish()
+        }
+        val getImageIntent =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                uri
+            }
+        btnAddIm.setOnClickListener {
+            getImageIntent.launch("image/*")
         }
 
         window.decorView.setOnTouchListener { _, event ->
@@ -101,7 +133,7 @@ class EntryActivity : AppCompatActivity() {
         window.decorView.startAnimation(animation)
 
         val id = intent.getLongExtra("entryId", 0)
-        val title = findViewById<TextView>(R.id.title)
+        val title = findViewById<EditText>(R.id.title)
         val mainText = findViewById<EditText>(R.id.editText_text)
         val images = intent.getStringArrayListExtra("entryImages")
         val userId = intent.getLongExtra("userId", 0)
@@ -136,5 +168,42 @@ class EntryActivity : AppCompatActivity() {
         intent.putExtra("userId", userId)
         startActivity(intent)
         finish()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val dataUri = data?.data
+            if (dataUri != null) {
+                var images = intent.getStringArrayListExtra("entryImages")
+                if (images == null)
+                    images = arrayListOf()
+                val imagesView = findViewById<RecyclerView>(R.id.images_list)
+                contentResolver.takePersistableUriPermission(
+                    dataUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                images.add(dataUri.toString())
+                imagesView.adapter = imagesAdapter
+                val id = intent.getLongExtra("entryId", 0)
+                val title = findViewById<EditText>(R.id.title)
+                val mainText = findViewById<EditText>(R.id.editText_text)
+                val db = DbEntry(DBHelper(this, null))
+                val time = Calendar.getInstance().time
+                val formatter = SimpleDateFormat("dd.MM.yyyy")
+                db.updateEntry(
+                    id,
+                    Entry(
+                        id,
+                        title.text.toString(),
+                        formatter.format(time),
+                        mainText.text.toString(),
+                        images
+                    )
+                )
+            }
+        }
     }
 }

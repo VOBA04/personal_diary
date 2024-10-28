@@ -17,9 +17,9 @@ class EntriesAdapter(
     RecyclerView.Adapter<EntriesAdapter.MyViewHolder>() {
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title = view.findViewById<TextView>(R.id.title_in_list)
-        val date = view.findViewById<TextView>(R.id.date_in_list)
-        val btn = view.findViewById<Button>(R.id.button_in_entry)
+        val title: TextView = view.findViewById(R.id.title_in_list)
+        val date: TextView = view.findViewById(R.id.date_in_list)
+        val btn: Button = view.findViewById(R.id.button_in_entry)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

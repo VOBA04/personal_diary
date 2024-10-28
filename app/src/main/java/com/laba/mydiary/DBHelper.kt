@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(private val context: Context, factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "app", factory, 5) {
+    SQLiteOpenHelper(context, "app", factory, 8) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryUser =
             "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY, login TEXT UNIQUE, pass TEXT)"

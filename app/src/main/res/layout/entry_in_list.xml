@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/title_in_list"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center_vertical"
@@ -24,22 +24,22 @@
 
         <TextView
             android:id="@+id/date_in_list"
-            android:layout_width="wrap_content"
+            android:layout_width="90dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.15"
             android:gravity="center_vertical|end"
             android:text="Date"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/button_in_entry"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.2"
+            android:layout_weight="0.35"
             android:text="Открыть"
-            android:textSize="15dp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
