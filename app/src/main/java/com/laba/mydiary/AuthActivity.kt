@@ -31,6 +31,12 @@ class AuthActivity : AppCompatActivity() {
         val userPass = findViewById<EditText>(R.id.editText_pass_auth)
         val authButton = findViewById<Button>(R.id.button_auth)
 
+        val db = DbUser(DBHelper(this, null))
+        val nativeLib = NativeLib()
+        val users = db.getAllUsers()
+        for (user in users)
+            nativeLib.addUser(user.login, user.password)
+
         authButton.setOnClickListener {
             val login = userLogin.text.toString().trim()
             val password = userPass.text.toString().trim()
@@ -38,9 +44,8 @@ class AuthActivity : AppCompatActivity() {
             if (login == "" || password == "")
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_LONG).show()
             else {
-                val db = DbUser(DBHelper(this, null))
-                val userId = db.getUser(login, password)
-                if (userId != -1L) {
+                if (nativeLib.isUserValid(login, password)) {
+                    val userId = db.getUser(login, password)
                     userLogin.text.clear()
                     val intent = Intent(this, EntriesActivity::class.java)
                     intent.putExtra("userId", userId)

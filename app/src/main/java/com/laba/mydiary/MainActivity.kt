@@ -31,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         val regButton = findViewById<Button>(R.id.button_reg)
         val signInButton = findViewById<Button>(R.id.button_to_sign_in)
 
+        val db = DbUser(DBHelper(this, null))
+        val nativeLib = NativeLib()
+        val users = db.getAllUsers()
+        for (user in users)
+            nativeLib.addUser(user.login, user.password)
+
         regButton.setOnClickListener {
             val login = userLogin.text.toString().trim()
             val password = userPass.text.toString().trim()
@@ -39,12 +45,15 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_LONG).show()
             else {
                 val user = User(login, password)
-                val db = DbUser(DBHelper(this, null))
-                if (db.addUser(user) == -1L)
+                if (nativeLib.isUserExists(login))
                     Toast.makeText(this, "Такой пользователь уже существует", Toast.LENGTH_LONG)
                         .show()
-                else
+                else {
                     Toast.makeText(this, "Вы успешно зарегистрированы!", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, AuthActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
                 userPass.text.clear()
                 userLogin.text.clear()
             }

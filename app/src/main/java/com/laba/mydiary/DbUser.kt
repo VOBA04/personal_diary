@@ -25,4 +25,16 @@ class DbUser(val db: DBHelper) {
         result.close()
         return userId
     }
+
+    fun getAllUsers(): ArrayList<User> {
+        val result = db.readableDatabase.rawQuery("SELECT * FROM Users", null)
+        val users = ArrayList<User>()
+        if (result.moveToFirst()) {
+            for (i in 1..result.count) {
+                users.add(User(result.getString(1), result.getString(2)))
+            }
+        }
+        result.close()
+        return users
+    }
 }
