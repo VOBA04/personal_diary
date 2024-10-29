@@ -11,58 +11,59 @@
 
     <TextView
         android:id="@+id/textView_reg"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="Зарегистрироваться"
         android:textAlignment="center"
         android:textColor="#f5f5f5"
-        android:textSize="30sp"
+        android:textSize="70sp"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editText_login"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
         android:ems="10"
         android:hint="Введите логин"
         android:inputType="text"
         android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textSize="40sp" />
 
     <EditText
         android:id="@+id/editText_pass"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="Введите пароль"
         android:inputType="textPassword"
         android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textSize="40sp" />
 
     <Button
         android:id="@+id/button_reg"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="Зарегистрироваться"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textSize="24sp" />
+        android:textSize="45sp" />
 
     <Button
         android:id="@+id/button_to_sign_in"
-        android:layout_width="250dp"
-        android:layout_height="48dp"
+        android:layout_width="450dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
+        android:maxLines="1"
         android:text="Войти в аккаунт"
-        android:textSize="18sp" />
+        android:textSize="36sp" />
 </LinearLayout>

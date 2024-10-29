@@ -3,6 +3,7 @@ package com.laba.mydiary
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
@@ -34,6 +35,10 @@ class EntryActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        requestedOrientation = if (resources.configuration.smallestScreenWidthDp >= 600)
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        else
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         val title = findViewById<EditText>(R.id.title)
         val btnBack = findViewById<Button>(R.id.button_back)
@@ -99,11 +104,11 @@ class EntryActivity : AppCompatActivity() {
             finish()
         }
         val getImageIntent =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 uri
             }
         btnAddIm.setOnClickListener {
-            getImageIntent.launch("image/*")
+            getImageIntent.launch(arrayOf("image/*"))
         }
 
         window.decorView.setOnTouchListener { _, event ->
@@ -181,10 +186,10 @@ class EntryActivity : AppCompatActivity() {
                 if (images == null)
                     images = arrayListOf()
                 val imagesView = findViewById<RecyclerView>(R.id.images_list)
-                contentResolver.takePersistableUriPermission(
-                    dataUri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                )
+//                contentResolver.takePersistableUriPermission(
+//                    dataUri,
+//                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+//                )
                 images.add(dataUri.toString())
                 imagesView.adapter = imagesAdapter
                 val id = intent.getLongExtra("entryId", 0)

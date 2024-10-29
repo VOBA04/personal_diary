@@ -2,6 +2,7 @@ package com.laba.mydiary
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
@@ -29,6 +30,10 @@ class EntriesActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        requestedOrientation = if (resources.configuration.smallestScreenWidthDp >= 600)
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        else
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
 
         val entriesList = findViewById<RecyclerView>(R.id.entries_list)

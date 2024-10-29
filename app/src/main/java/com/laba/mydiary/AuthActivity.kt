@@ -1,6 +1,7 @@
 package com.laba.mydiary
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -20,6 +21,10 @@ class AuthActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        requestedOrientation = if (resources.configuration.smallestScreenWidthDp >= 600)
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        else
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         val toRegButton = findViewById<Button>(R.id.button_to_reg)
         val userLogin = findViewById<EditText>(R.id.editText_login_auth)

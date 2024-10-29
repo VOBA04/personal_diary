@@ -1,6 +1,7 @@
 package com.laba.mydiary
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,10 @@ class ImagesAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        context.contentResolver.takePersistableUriPermission(
+            images[position].toUri(),
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
         holder.imageView.setImageURI(images[position].toUri())
 
     }
